@@ -15,14 +15,14 @@ import com.webupps.spring.app.repository.UsersRepository;
 public class UserRegistrationService {
     
     
-	//@Autowired
+	@Autowired
     UsersRepository usersRepository;
 
 	public static void main(String[] args) {
 	}
 	
 	@Transactional
-    public ResponseEntity<?> registerNewUserAccount(Users users) { 
+    public ResponseEntity<Users> registerNewUserAccount(Users users) { 
 	    if (emailExist(users.getUsername())) {  
 	    	usersRepository.save(users);
     		return new ResponseEntity<Users>(users, new HttpHeaders(), HttpStatus.OK);

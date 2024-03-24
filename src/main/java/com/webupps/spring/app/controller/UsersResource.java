@@ -19,39 +19,26 @@ import org.springframework.http.HttpStatus;
 import com.webupps.spring.app.model.Users;
 import com.webupps.spring.app.repository.UsersRepository;
 import com.webupps.spring.app.service.EmailValidatorService;
+import com.webupps.spring.app.service.UserRegistrationService;
 
 @RestController // shorthand for @Controller and @ResponseBody rolled together
 @RequestMapping("/v1/users")
 public class UsersResource {
 
 
-
-	private static UsersRepository usersRepository;
-	/*
-	private UsersRepository usersRepository;
-
-    public UsersResource(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
-    } */
+	@Autowired
+    UsersRepository usersRepository;
 
 	
 	@PostMapping("/add")
     public ResponseEntity<Users> addUsers(@RequestBody Users users) {
-		//return new ResponseEntity<Users>(users, new HttpHeaders(), HttpStatus.OK);
-		/*
-    	if(EmailValidatorService.isValidEmailAddress(users.getUsername())){
-    		usersRepository.save(users);
-    		return new ResponseEntity<Users>(users, new HttpHeaders(), HttpStatus.OK);
-    	} else { 
-    		return new ResponseEntity<Users>(users, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
-    	}*/
-		
 		try {
 			Users _users = usersRepository.save(users);
 		      return new ResponseEntity<Users>(_users, HttpStatus.CREATED);
 		    } catch (Exception e) {
 		      return new ResponseEntity<Users>(users, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
     }
 	
 	@PutMapping("/update/{id}")
@@ -88,13 +75,14 @@ public class UsersResource {
     }
     @GetMapping("/get/{id}")
     public ResponseEntity<Users> getUser(@PathVariable final Long id) {
+    	
         
     	if(usersRepository.findById(id).get() == null){
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	} else { 
     		return new ResponseEntity<Users>(usersRepository.findById(id).get(), new HttpHeaders(), HttpStatus.OK);
     	}
-    }
+    } 
 
 }
 
