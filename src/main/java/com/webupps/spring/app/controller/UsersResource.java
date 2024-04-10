@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 //import com.bezkoder.spring.restapi.model.Tutorial;
 import com.webupps.spring.app.model.Users;
@@ -33,8 +34,14 @@ public class UsersResource {
 	@PostMapping("/add")
     public ResponseEntity<Users> addUsers(@RequestBody Users users) {
 		try {
-			Users _users = usersRepository.save(users);
-		      return new ResponseEntity<Users>(_users, HttpStatus.CREATED);
+		      if(EmailValidatorService.isValidEmailAddress(users.getUsername())){
+		    		//usersRepository.save(users);
+		    		Users _users = usersRepository.save(users);
+				      //return new ResponseEntity<Users>(_users, HttpStatus.CREATED);
+		    		return new ResponseEntity<Users>(_users, new HttpHeaders(), HttpStatus.CREATED);
+		    	} else { 
+		    		return new ResponseEntity<Users>(users, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+		    	}
 		    } catch (Exception e) {
 		      return new ResponseEntity<Users>(users, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
