@@ -1,5 +1,5 @@
-# springboot-crud
-Free Demo project for Spring Boot
+# The Art of Software in Action - Spring Boot REST API
+Free Demo project of Spring Boot with MariaDB in REST API
 
 ## Requirements 
 Java Version
